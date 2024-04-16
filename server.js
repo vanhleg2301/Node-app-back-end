@@ -56,7 +56,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+const URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.7rlyvdl.mongodb.net/`;
+
 app.listen(PORT, () => {
-  connectDB();
+  connectDB(URI);
   console.log(`Server running on port ${PORT}`);
 });
