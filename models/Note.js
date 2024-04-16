@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const noteSchema = new mongoose.Schema(
   {
@@ -6,12 +6,12 @@ const noteSchema = new mongoose.Schema(
       type: String,
     },
     folderId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId, // Thay đổi kiểu dữ liệu của folderId
+      ref: "folders",
     },
   },
   { timestamps: true }
 );
 
-const Note = mongoose.model("Notes", noteSchema);
+const Note = mongoose.model("notes", noteSchema);
 export default Note;

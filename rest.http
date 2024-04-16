@@ -1,8 +1,22 @@
 
 ###
-GET http://localhost:9999/folders/
+GET http://localhost:9999/folders/661eb66b7db44be8d0fdcbb0
+
+
 ###
-GET http://localhost:9999/blogs/
+GET http://localhost:9999/notes/
+###
+GET http://localhost:9999/notes/note/Ditmechungmay
+
+###
+POST http://localhost:9999/notes/
+Content-Type: application/json
+
+{
+    "content": "ha",
+    "folderId": "661edc38c7cbb47c2b4eed05"
+}
+
 ###
 GET http://localhost:9999/folders/661e58c86f93605a0b7d36a8
 
