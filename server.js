@@ -14,7 +14,7 @@ import {
 } from "./routes/indexRoutes.js";
 
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 9999;
 
 const app = express();
 // Ghi log khi cos request call api
@@ -58,7 +58,7 @@ app.use((err, req, res, next) => {
 
 const URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.7rlyvdl.mongodb.net/`;
 
-app.listen(PORT, () => {
+app.listen({ port: PORT }, () => {
   connectDB(URI);
   console.log(`Server running on port ${PORT}`);
 });
