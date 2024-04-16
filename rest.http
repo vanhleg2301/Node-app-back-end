@@ -1,0 +1,80 @@
+
+###
+GET http://localhost:9999/folders/
+###
+GET http://localhost:9999/blogs/
+###
+GET http://localhost:9999/folders/661e58c86f93605a0b7d36a8
+
+###
+POST http://localhost:9999/folders/
+Content-Type: application/json
+
+{
+    "name": "Plan for holiday 1",
+    "authorId": "2"
+}
+
+
+### 
+GET http://localhost:9999/users/660bc10d1a9d157eccf54780
+Authorization: Bearer 
+
+###
+DELETE  http://localhost:9999/auth/logout
+Authorization: Beare eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTIwNjYyNjQsImV4cCI6MTcxMjA3NzA2NCwiYXVkIjoiNjYwYmRkMDRiOWI4NDhkYjQ3OTM4MGNhIiwiaXNzIjoibG9jYWxob3N0Ojk5OTkifQ.bkVudQkjLkNVN_DZAfWQ-IseDderGo05rh-wox-68mk
+ 
+###
+POST http://localhost:9999/auth/login
+Content-Type: application/json
+
+{
+    "email": "avanhlegadmin@gmail.com",
+    "password": "123"
+}
+
+###
+POST http://localhost:9999/auth/verify
+Authorization: Bearer 
+
+
+###
+POST http://localhost:9999/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": ""
+}
+
+###
+POST http://localhost:9999/auth/register
+Content-Type: application/json
+
+{
+    "email": "avanhlegadmin@gmail.com",
+    "password": "123",
+    "name": "Vanh",
+    "refreshToken": ""
+}
+
+
+
+###
+Get http://localhost:9999/blogs
+Authorization: Bearer 
+
+
+###
+POST http://localhost:9999/blogs
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+    "userId": "660ad8788411bdf4438214db", 
+    "name": "Quynh", 
+    "content": "Lol lol lol lol"
+}
+
+
+
+
