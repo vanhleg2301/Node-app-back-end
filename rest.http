@@ -1,7 +1,7 @@
 
 ###
 GET http://localhost:9999/folders/
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MTMzNTIzNjYsImV4cCI6MTcxMzM2MzE2NiwiYXVkIjoiNjYxZjhlZTA5NjIyYTA5MjI4NTBjZGZiIiwiaXNzIjoibG9jYWxob3N0Ojk5OTkifQ.FDaUgbRIx_MjBoq4hU5Jz121ecZBqe5_1TLE1FLzQQ0
 
 ###
 GET http://localhost:9999/notes/
