@@ -37,9 +37,9 @@ app.get("/", verifyAccessToken, async (req, res, next) => {
 
 app.use("/auth", authRouter);
 app.use("/users", verifyAccessToken, userRouter);
-app.use("/blogs", blogRouter);
-app.use("/folders", folderRouter);
-app.use("/notes", noteRouter);
+app.use("/blogs", verifyAccessToken, blogRouter);
+app.use("/folders", verifyAccessToken, folderRouter);
+app.use("/notes", verifyAccessToken, noteRouter);
 
 // Chỉ định middleware kiểm soát requests không hợp lệ
 app.use(async (req, res, next) => {

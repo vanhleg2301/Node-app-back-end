@@ -3,6 +3,7 @@ import createError from "http-errors";
 
 import bcrypt from "bcrypt";
 import Blog from "../models/Blog.js";
+import User from "../models/User.js";
 
 const BlogRouter = express.Router();
 
@@ -18,9 +19,18 @@ BlogRouter.get("/", async (req, res, next) => {
 // Create a new blog
 BlogRouter.post("/", async (req, res, next) => {
   try {
-    const { userId, name, content } = req.body;
-    const newBlog = new Blog({ userId, name, content });
+    const { name, content, userId } = req.body;
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const newBlog = new Blog({ userId: user._id, name, content });
+
     const savedBlog = await newBlog.save();
+
     res.status(201).json(savedBlog);
   } catch (error) {
     next(error);

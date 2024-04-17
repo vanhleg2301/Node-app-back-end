@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import {
   signAccessToken,
   signRefreshToken,
+  updateAccessToken,
   updateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,
@@ -14,7 +15,16 @@ const AuthRouter = express.Router();
 
 AuthRouter.post("/register", async (req, res, next) => {
   try {
-    const { email, password, name, refreshToken, role = "user" } = req.body;
+    const {
+      email,
+      password,
+      displayName,
+      photoURL,
+      phoneNumber,
+      accessToken,
+      refreshToken,
+      role = "user",
+    } = req.body;
 
     if (!email || !password) throw createError.BadRequest();
 
@@ -29,7 +39,12 @@ AuthRouter.post("/register", async (req, res, next) => {
     const savedUser = await User.create({
       email,
       password: hashPass,
-      name,
+      displayName,
+      photoURL,
+      phoneNumber,
+      // authorId,
+      // userId,
+      accessToken,
       refreshToken,
       role,
     });
@@ -58,10 +73,11 @@ AuthRouter.post("/login", async (req, res, next) => {
 
     const refreshToken = await signRefreshToken(existUser.id);
 
+    updateAccessToken(email, accessToken);
     updateRefreshToken(email, refreshToken);
-    console.log(existUser);
 
-    res.send({ accessToken, refreshToken });
+    res.send({ user: existUser });
+    console.log({ existUser });
   } catch (error) {
     next(error);
   }

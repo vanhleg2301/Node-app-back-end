@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { Types } from "mongoose";
 
 const BlogSchema = new Schema({
   userId: {

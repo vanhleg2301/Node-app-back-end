@@ -1,12 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 
-const noteSchema = new mongoose.Schema(
+const noteSchema = new Schema(
   {
     content: {
       type: String,
     },
     folderId: {
-      type: Schema.Types.ObjectId, // Thay đổi kiểu dữ liệu của folderId
+      type: Schema.Types.ObjectId,
       ref: "folders",
     },
   },

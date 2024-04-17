@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const folderSchema = new mongoose.Schema(
+const folderSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
     },
     authorId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "users",
     },
   },
   { timestamps: true }

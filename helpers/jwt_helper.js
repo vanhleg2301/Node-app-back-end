@@ -72,6 +72,21 @@ const updateRefreshToken = async (email, refreshToken) => {
   }
 };
 
+const updateAccessToken = async (email, accessToken) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: email },
+      { accessToken: accessToken },
+      { new: true }
+    );
+    console.log("accessToken token updated successfully:", user);
+    return user;
+  } catch (error) {
+    console.error("Error updating accessToken token:", error);
+    throw error;
+  }
+};
+
 function signRefreshToken(userId) {
   return new Promise((resolve, reject) => {
     const payload = {};
@@ -120,6 +135,7 @@ function verifyRefreshToken(refreshToken) {
 export {
   signAccessToken,
   signRefreshToken,
+  updateAccessToken,
   updateRefreshToken,
   verifyAccessToken,
   verifyRefreshToken,

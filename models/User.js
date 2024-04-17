@@ -11,12 +11,25 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  name: {
+  displayName: {
     type: String,
   },
-  blog: {
-    type: Schema.Types.ObjectId,
-    ref: "blogs",
+  photoURL: {
+    type: String,
+  },
+  phoneNumber: {
+    type: Number,
+  },
+  // authorId: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "folders",
+  // },
+  // userId: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "blogs",
+  // },
+  accessToken: {
+    type: String,
   },
   refreshToken: {
     type: String,
