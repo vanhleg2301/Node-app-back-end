@@ -41,9 +41,9 @@ FolderRouter.delete("/:id", async (req, res, next) => {
     const folderId = req.params.id;
     const deleteFolder = await Folder.findByIdAndDelete(folderId);
     if (!deleteFolder) {
-      throw createError(404, "Blog not found");
+      throw createError(404, "Folder not found");
     }
-    res.json({ message: "Blog deleted successfully" });
+    res.json({ message: "Folder deleted successfully" });
   } catch (error) {
     next(error);
   }

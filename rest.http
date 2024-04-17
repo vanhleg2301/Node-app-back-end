@@ -6,7 +6,7 @@ GET http://localhost:9999/folders/661eb66b7db44be8d0fdcbb0
 ###
 GET http://localhost:9999/notes/
 ###
-GET http://localhost:9999/notes/note/Ditmechungmay
+DELETE http://localhost:9999/notes/661ec8ffffd697721efd171e
 
 ###
 POST http://localhost:9999/notes/

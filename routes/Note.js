@@ -67,4 +67,18 @@ NoteRouter.post("/", async (req, res, next) => {
   }
 });
 
+// Delete a folder by ID
+NoteRouter.delete("/:id", async (req, res, next) => {
+  try {
+    const noteId = req.params.id;
+    const deleteNote = await Note.findByIdAndDelete(noteId);
+    if (!deleteNote) {
+      throw createError(404, "Note not found");
+    }
+    res.json({ message: "Note deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default NoteRouter;
