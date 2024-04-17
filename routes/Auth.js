@@ -76,8 +76,8 @@ AuthRouter.post("/login", async (req, res, next) => {
     updateAccessToken(email, accessToken);
     updateRefreshToken(email, refreshToken);
 
-    res.send({ user: existUser });
-    console.log({ existUser });
+    res.send({ accessToken, user: existUser });
+    console.log({ accessToken, existUser });
   } catch (error) {
     next(error);
   }

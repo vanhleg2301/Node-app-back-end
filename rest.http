@@ -71,7 +71,6 @@ Content-Type: application/json
     "password": "123"
 }
 
-
 ###
 POST http://localhost:9999/auth/register
 Content-Type: application/json
