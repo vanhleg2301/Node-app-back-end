@@ -6,25 +6,56 @@ const FolderRouter = express.Router();
 
 FolderRouter.get("/", async (req, res, next) => {
   try {
-    const listFolder = await Folder.find().sort({ updatedAt: "desc" });
+    const listFolder = await Folder.find().sort({ updatedAt: "desc" }).exec();
     res.send(listFolder);
   } catch (error) {
     next(error);
   }
 });
 
-// Create a new folder
+//create
 FolderRouter.post("/", async (req, res, next) => {
   try {
     const { name, authorId } = req.body;
-    const newFolder = new Folder({ name, authorId });
+
+    const newFolderData = {
+      name,
+      authorId: authorId || req.user.uid,
+    };
+
+    const newFolder = new Folder(newFolderData);
     const savedFolder = await newFolder.save();
+
     res.status(201).json(savedFolder);
   } catch (error) {
     next(error);
   }
 });
 
+// Update folder
+// update folder
+FolderRouter.patch("/:folderId", async (req, res, next) => {
+  try {
+    const { folderId } = req.params;
+    const { name } = req.body;
+
+    const updatedFolder = await Folder.findByIdAndUpdate(
+      folderId,
+      { name },
+      { new: true }
+    );
+
+    if (!updatedFolder) {
+      throw createError(404, "Folder not found");
+    }
+
+    res.json(updatedFolder);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get folder by id
 FolderRouter.get("/:folderId", async (req, res, next) => {
   try {
     const { folderId } = req.params;

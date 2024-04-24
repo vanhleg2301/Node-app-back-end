@@ -7,7 +7,7 @@ const folderSchema = new Schema(
       required: true,
     },
     authorId: {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.Mixed,
       ref: "users",
     },
   },

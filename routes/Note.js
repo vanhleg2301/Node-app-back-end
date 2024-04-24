@@ -7,7 +7,7 @@ const NoteRouter = express.Router();
 
 NoteRouter.get("/", async (req, res, next) => {
   try {
-    const listNote = await Note.find().exec();
+    const listNote = await Note.find().sort({ updatedAt: "desc" }).exec();
     res.send(listNote);
   } catch (error) {
     next(error);
@@ -46,19 +46,39 @@ NoteRouter.get("/note/:content", async (req, res, next) => {
   }
 });
 
+// Update note by ID
+NoteRouter.put("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { content, folderId } = req.body;
+
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { content, folderId },
+      { new: true }
+    );
+
+    if (!updatedNote) {
+      throw createError(404, "Note not found");
+    }
+
+    res.json(updatedNote);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Create a new note
 NoteRouter.post("/", async (req, res, next) => {
   try {
     const { content, folderId } = req.body;
 
-    const folder = await Folder.findOne({ _id: folderId });
+    // const folder = await Folder.findOne({ _id: folderId });
+    // if (!folder) {
+    //   return res.status(400).json({ message: "Folder not found" });
+    // }
 
-    if (!folder) {
-      return res.status(400).json({ message: "Folder not found" });
-    }
-
-    const newNote = new Note({ content, folderId: folder._id });
-
+    const newNote = new Note({ content, folderId: folderId });
     const savedNote = await newNote.save();
 
     res.status(201).json(savedNote);

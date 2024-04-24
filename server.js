@@ -12,11 +12,14 @@ import {
   folderRouter,
   noteRouter,
 } from "./routes/indexRoutes.js";
+import "./firebaseConfig.js";
+import { getAuth } from "firebase-admin/auth";
 
 dotenv.config();
 const PORT = process.env.PORT || 9999;
 
 const app = express();
+
 // Ghi log khi cos request call api
 app.use(morgan("dev"));
 app.use(express.json());
@@ -29,12 +32,36 @@ app.use(
   })
 );
 
+const authorizationJWT = async (req, res, next) => {
+  console.log({ authorization: req.headers.authorization });
+  const authorizationHeader = req.headers.authorization;
+
+  if (authorizationHeader) {
+    const accessToken = authorizationHeader.split(" ")[1];
+
+    getAuth()
+      .verifyIdToken(accessToken)
+      .then((decodedToken) => {
+        console.log({ decodedToken });
+        // res.locals.uid = decodedToken.uid;
+        next();
+      })
+      .catch((err) => {
+        console.log({ err });
+        return res.status(403).json({ message: "Forbidden", error: err });
+      });
+  } else {
+    next();
+    // return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
 // Router:
 app.use("/auth", authRouter);
-app.use("/users", verifyAccessToken, userRouter);
-app.use("/blogs", verifyAccessToken, blogRouter);
-app.use("/folders", verifyAccessToken, folderRouter);
-app.use("/notes", noteRouter);
+app.use("/users", authorizationJWT, userRouter);
+app.use("/blogs", authorizationJWT, blogRouter);
+app.use("/folders", authorizationJWT, folderRouter);
+app.use("/notes", authorizationJWT, noteRouter);
 
 // Chỉ định middleware kiểm soát requests không hợp lệ
 app.use(async (req, res, next) => {
@@ -51,9 +78,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-const URI = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.7rlyvdl.mongodb.net/`;
+const URI = `http://localhost:9999/`;
+//`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.7rlyvdl.mongodb.net/`;
 
 app.listen({ port: PORT }, () => {
-  connectDB(URI);
+  connectDB(process.env.MONGO_URI);
   console.log(`Server running on port ${PORT}`);
 });

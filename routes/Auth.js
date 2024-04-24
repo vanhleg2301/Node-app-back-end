@@ -73,11 +73,11 @@ AuthRouter.post("/login", async (req, res, next) => {
 
     const refreshToken = await signRefreshToken(existUser.id);
 
-    updateAccessToken(email, accessToken);
     updateRefreshToken(email, refreshToken);
+    await existUser.save();
 
     res.send({ accessToken, user: existUser });
-    console.log({ accessToken, existUser });
+    console.log({ existUser });
   } catch (error) {
     next(error);
   }
@@ -98,6 +98,7 @@ AuthRouter.delete("/logout", verifyAccessToken, async (req, res, next) => {
     // Cập nhật refreshToken của người dùng thành null
     const usr = await User.findByIdAndUpdate(userId, { refreshToken: null });
     console.log(usr);
+
     // Trả về mã trạng thái 204 (No Content) để cho biết đăng xuất thành công
     res.sendStatus(204);
   } catch (error) {
