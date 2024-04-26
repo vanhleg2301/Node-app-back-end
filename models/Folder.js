@@ -8,7 +8,7 @@ const folderSchema = new Schema(
     },
     authorId: {
       type: Schema.Types.Mixed,
-      ref: "users",
+      // ref: "users",
     },
   },
   { timestamps: true }

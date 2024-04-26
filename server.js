@@ -43,7 +43,7 @@ const authorizationJWT = async (req, res, next) => {
       .verifyIdToken(accessToken)
       .then((decodedToken) => {
         console.log({ decodedToken });
-        // res.locals.uid = decodedToken.uid;
+        res.locals.uid = decodedToken.uid;
         next();
       })
       .catch((err) => {
@@ -52,16 +52,18 @@ const authorizationJWT = async (req, res, next) => {
       });
   } else {
     next();
-    // return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
 
 // Router:
 app.use("/auth", authRouter);
 app.use("/users", authorizationJWT, userRouter);
-app.use("/blogs", authorizationJWT, blogRouter);
 app.use("/folders", authorizationJWT, folderRouter);
 app.use("/notes", authorizationJWT, noteRouter);
+
+// public
+app.use("/blogs", blogRouter);
 
 // Chỉ định middleware kiểm soát requests không hợp lệ
 app.use(async (req, res, next) => {

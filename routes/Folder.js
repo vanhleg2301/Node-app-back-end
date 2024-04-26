@@ -13,6 +13,22 @@ FolderRouter.get("/", async (req, res, next) => {
   }
 });
 
+// Get Folder base on authId
+FolderRouter.get("/:authId", async (req, res, next) => {
+  try {
+    const { authId } = req.params;
+
+    // Tìm tất cả các thư mục có authorId là authId
+    const listFolder = await Folder.find({ authorId: authId })
+      .sort({ updatedAt: "desc" })
+      .exec();
+
+    res.send(listFolder);
+  } catch (error) {
+    next(error);
+  }
+});
+
 //create
 FolderRouter.post("/", async (req, res, next) => {
   try {
@@ -33,7 +49,6 @@ FolderRouter.post("/", async (req, res, next) => {
 });
 
 // Update folder
-// update folder
 FolderRouter.patch("/:folderId", async (req, res, next) => {
   try {
     const { folderId } = req.params;
@@ -70,6 +85,9 @@ FolderRouter.get("/:folderId", async (req, res, next) => {
 FolderRouter.delete("/:id", async (req, res, next) => {
   try {
     const folderId = req.params.id;
+    if (!req.user) {
+      throw createError(401, "Unauthorized");
+    }
     const deleteFolder = await Folder.findByIdAndDelete(folderId);
     if (!deleteFolder) {
       throw createError(404, "Folder not found");

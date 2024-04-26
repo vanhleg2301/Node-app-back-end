@@ -13,9 +13,38 @@ import {
 
 const AuthRouter = express.Router();
 
+AuthRouter.post("/loginWith", async (req, res, next) => {
+  try {
+    const userData = req.body;
+    console.log("[From front-end]: ", userData);
+
+    // Find the existing user by email
+    // let existingUser = await User.findOne({ email: userData.email });
+    let existingUser = await User.findOne({ uid: userData.uid });
+
+    // If the user doesn't exist, create a new user
+    if (!existingUser) {
+      existingUser = new User(userData);
+    } else {
+      // Update the existing user data
+      existingUser.set(userData);
+    }
+
+    // Save the user data
+    await existingUser.save();
+
+    // Send a success response
+    res.status(200).json({ success: true, user: existingUser });
+  } catch (error) {
+    // Handle errors
+    next(error);
+  }
+});
+
 AuthRouter.post("/register", async (req, res, next) => {
   try {
     const {
+      uid,
       email,
       password,
       displayName,
@@ -37,13 +66,12 @@ AuthRouter.post("/register", async (req, res, next) => {
       parseInt(process.env.PASSWORD_SECRET)
     );
     const savedUser = await User.create({
+      uid,
       email,
       password: hashPass,
       displayName,
       photoURL,
       phoneNumber,
-      // authorId,
-      // userId,
       accessToken,
       refreshToken,
       role,
@@ -73,6 +101,7 @@ AuthRouter.post("/login", async (req, res, next) => {
 
     const refreshToken = await signRefreshToken(existUser.id);
 
+    updateAccessToken(email, accessToken);
     updateRefreshToken(email, refreshToken);
     await existUser.save();
 
