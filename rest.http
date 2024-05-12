@@ -1,6 +1,15 @@
 
 ### 
-GET http://localhost:9999/notes/note/6627860b0a897123b5118317
+GET http://localhost:9999/notes
+
+### 
+PUT http://localhost:9999/notes/6640ff49bea8ecdb989d1be3
+Content-Type: application/json
+
+{
+    "content": "100000"
+}
+
 
 ###
 GET http://localhost:9999/folders/1

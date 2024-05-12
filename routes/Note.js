@@ -36,11 +36,11 @@ NoteRouter.get("/:id", async (req, res, next) => {
 NoteRouter.put("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { content, folderId } = req.body;
+    const { content } = req.body;
 
     const updatedNote = await Note.findByIdAndUpdate(
       id,
-      { content, folderId },
+      { content },
       { new: true }
     );
 
