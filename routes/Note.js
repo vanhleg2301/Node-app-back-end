@@ -18,29 +18,15 @@ NoteRouter.get("/", async (req, res, next) => {
 NoteRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const notes = await Note.find({ folderId: id }).exec();
+    const notes = await Note.find({ folderId: id })
+      .sort({ updatedAt: "desc" })
+      .exec();
 
     if (!notes) {
       return res.status(404).json({ message: "Note not found" });
     }
 
-    res.json(notes);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// get note by content
-NoteRouter.get("/note/:content", async (req, res, next) => {
-  try {
-    const { content } = req.params;
-    const note = await Note.find({ content: content }).exec();
-
-    if (!note) {
-      return res.status(404).json({ message: "Note not found" });
-    }
-
-    res.json(note);
+    res.send(notes);
   } catch (error) {
     next(error);
   }
@@ -62,7 +48,7 @@ NoteRouter.put("/:id", async (req, res, next) => {
       throw createError(404, "Note not found");
     }
 
-    res.json(updatedNote);
+    res.send(updatedNote);
   } catch (error) {
     next(error);
   }
@@ -81,7 +67,23 @@ NoteRouter.post("/", async (req, res, next) => {
     const newNote = new Note({ content, folderId: folderId });
     const savedNote = await newNote.save();
 
-    res.status(201).json(savedNote);
+    res.status(201).send(savedNote);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get note by id
+NoteRouter.get("/note/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const note = await Note.findById(id);
+
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.send(note);
   } catch (error) {
     next(error);
   }
@@ -90,12 +92,12 @@ NoteRouter.post("/", async (req, res, next) => {
 // Delete a folder by ID
 NoteRouter.delete("/:id", async (req, res, next) => {
   try {
-    const noteId = req.params.id;
+    const { id: noteId } = req.params;
     const deleteNote = await Note.findByIdAndDelete(noteId);
     if (!deleteNote) {
       throw createError(404, "Note not found");
     }
-    res.json({ message: "Note deleted successfully" });
+    res.send({ message: "Note deleted successfully" });
   } catch (error) {
     next(error);
   }

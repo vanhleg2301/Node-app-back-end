@@ -11,6 +11,7 @@ import {
   blogRouter,
   folderRouter,
   noteRouter,
+  imageRouter,
 } from "./routes/indexRoutes.js";
 import "./firebaseConfig.js";
 import { getAuth } from "firebase-admin/auth";
@@ -60,10 +61,11 @@ const authorizationJWT = async (req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", authorizationJWT, userRouter);
 app.use("/folders", authorizationJWT, folderRouter);
-app.use("/notes", authorizationJWT, noteRouter);
+app.use("/notes", noteRouter);
 
 // public
 app.use("/blogs", blogRouter);
+app.use("/images", imageRouter);
 
 // Chỉ định middleware kiểm soát requests không hợp lệ
 app.use(async (req, res, next) => {

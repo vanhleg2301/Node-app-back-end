@@ -1,6 +1,7 @@
 import express from "express";
 import createError from "http-errors";
 import Folder from "../models/Folder.js";
+import Note from "../models/Note.js";
 
 const FolderRouter = express.Router();
 
@@ -42,7 +43,7 @@ FolderRouter.post("/", async (req, res, next) => {
     const newFolder = new Folder(newFolderData);
     const savedFolder = await newFolder.save();
 
-    res.status(201).json(savedFolder);
+    res.status(201).send(savedFolder);
   } catch (error) {
     next(error);
   }
@@ -64,18 +65,21 @@ FolderRouter.patch("/:folderId", async (req, res, next) => {
       throw createError(404, "Folder not found");
     }
 
-    res.json(updatedFolder);
+    res.send(updatedFolder);
   } catch (error) {
     next(error);
   }
 });
 
 // get folder by id
-FolderRouter.get("/:folderId", async (req, res, next) => {
+FolderRouter.get("/:id", async (req, res, next) => {
   try {
-    const { folderId } = req.params;
-    const folder = await Folder.find({ _id: folderId }).exec();
-    res.json(folder);
+    const { id: folderId } = req.params;
+    const folder = await Folder.findById(folderId);
+    if (!folder) {
+      throw createError(404, "Folder not found");
+    }
+    res.send(folder);
   } catch (error) {
     next(error);
   }
@@ -84,15 +88,19 @@ FolderRouter.get("/:folderId", async (req, res, next) => {
 // Delete a folder by ID
 FolderRouter.delete("/:id", async (req, res, next) => {
   try {
-    const folderId = req.params.id;
-    if (!req.user) {
-      throw createError(401, "Unauthorized");
-    }
+    const { id: folderId } = req.params;
+
     const deleteFolder = await Folder.findByIdAndDelete(folderId);
     if (!deleteFolder) {
       throw createError(404, "Folder not found");
     }
-    res.json({ message: "Folder deleted successfully" });
+
+    // const note = await Note.findByIdAndDelete({ folderId: folderId });
+    // if (!note) {
+    //   throw createError(404, "Note not found");
+    // }
+
+    res.send({ message: "Folder deleted successfully" });
   } catch (error) {
     next(error);
   }
